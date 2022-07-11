@@ -55,7 +55,7 @@ app.get('/tasks/:id', async (req, res) => {
   }
 })
 
-// Update task --------------------------- FALTA ESTO NADA MAS (UPDATE) ------------------------
+// Update task
 app.put('/tasks/:id', async (req, res) => {
   const taskId = req.params.id
   const { description, done } = req.body
@@ -64,22 +64,15 @@ app.put('/tasks/:id', async (req, res) => {
     done
   }
   try {
-    const updatedTask = await tasks.update(req.body, { where: { id: taskId }})
-    //Esta listo.puedes testar ela alteracion
-
-    if(updatedTask.matchedCount === 0) {
-      res.status(422).json({ message: 'This task does not exists!' })
-      return
-    }
+    await tasks.update(task, { where: { id: taskId } })
 
     res.status(200).send({
       action: 'Updating task',
-      updatedTask
+      task
     })
   } catch (error) {
     res.status(500).json({ error: error + ". Ups! Something wrong..." })
   }
-  res.send({ action: 'Updating task', taskId: taskId })
 })
 
 // Delete task
